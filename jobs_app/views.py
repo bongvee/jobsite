@@ -6,9 +6,9 @@ from .models import Job
 from .serializers import JobSerializer
 
 
-# get list of jobs
+# read list of jobs
 @api_view(['GET'])
-def getAllJobs(request):
+def readAllJobs(request):
 
     jobs = Job.objects.all()
 
@@ -16,9 +16,9 @@ def getAllJobs(request):
     return Response(serializer.data)
 
 
-# get a specific job id
+# read a specific job id
 @api_view(['GET'])
-def getJob(request, pk):
+def readAJob(request, pk):
     # to handle record/detail not found
     job = get_object_or_404(Job, id=pk)
 
@@ -28,7 +28,7 @@ def getJob(request, pk):
 
 # create/ add a new job
 @api_view(['POST'])
-def newJob(request):
+def createAJob(request):
     data = request.data
 
     job = Job.objects.create(**data)
@@ -39,7 +39,7 @@ def newJob(request):
 
 # update/ edit the job details
 @api_view(['PUT'])
-def updateJob(request, pk):
+def updateAJob(request, pk):
     job = get_object_or_404(Job, id=pk)
 
     job.title = request.data['title']
@@ -62,7 +62,7 @@ def updateJob(request, pk):
 
 # delete/ remove a job
 @api_view(['DELETE'])
-def deleteJob(request, pk):
+def deleteAJob(request, pk):
     job = get_object_or_404(Job, id=pk)
 
     job.delete()
