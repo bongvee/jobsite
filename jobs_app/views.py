@@ -5,15 +5,21 @@ from rest_framework.response import Response
 from .models import Job
 from .serializers import JobSerializer
 from django.db.models import Avg, Min, Max, Count   # search statistics
+from .filters import JobsFilter
 
 
 # read list of jobs
 @api_view(['GET'])
 def readAllJobs(request):
 
-    jobs = Job.objects.all()
+    # read all jobs
+    # jobs = Job.objects.all()
+    # serializer = JobSerializer(jobs, many=True)
 
-    serializer = JobSerializer(jobs, many=True)
+    # read FILTERED jobs
+    filterset = JobsFilter(request.GET, queryset=Job.objects.all().order_by('id'))
+    serializer = JobSerializer(filterset.qs, many=True)
+
     return Response(serializer.data)
 
 
