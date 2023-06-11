@@ -79,13 +79,13 @@ def deleteAJob(request, pk):
 
 # search statistics
 @api_view(['GET'])
-def readSearchStatistics(request, search):
+def readTopicStatistics(request, topic):
 
-    args = { 'title__icontains': search }
+    args = { 'title__icontains': topic }
     jobs = Job.objects.filter(**args)
 
     if len(jobs) == 0:
-        return Response({'message': 'No jobs found for {search}'.format(search=search)})
+        return Response({'message': 'No jobs found for {topic}'.format(topic=topic.upper())})
     
     status = jobs.aggregate(
         total_jobs= Count('title'),
