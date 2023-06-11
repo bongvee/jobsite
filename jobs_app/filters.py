@@ -4,7 +4,7 @@ from .models import Job
 class JobsFilter(filters.FilterSet):
 
     # SEARCH API
-    keyword = filters.CharFilter(field_name='title', lookup_expr='icontains')
+    title_keyword = filters.CharFilter(field_name='title', lookup_expr='icontains')
     location = filters.CharFilter(field_name='address', lookup_expr='icontains')
 
     # FILTERS
@@ -13,4 +13,4 @@ class JobsFilter(filters.FilterSet):
 
     class Meta:
         model = Job
-        fields = ('keyword', 'location', 'education', 'experience', 'jobType', 'industry', 'min_salary', 'max_salary')
+        fields = ('title_keyword', 'location', 'education', 'experience', 'jobType', 'industry', 'min_salary', 'max_salary')

@@ -79,7 +79,11 @@ class Job(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):
-        g = geocoder.mapquest(self.address, key=os.environ.get('GEOCODER_API'))
+        # MAPQUEST API
+        g = geocoder.mapquest(self.address, key=os.environ.get('MAPQUEST_GEOCODER_API'))
+        # LOCATIONIQ API
+        # g = geocoder.locationiq(self.address, key=os.environ.get('LOACATIONIQ_GEOCODER_API'))
+
 
         print(g)
 
