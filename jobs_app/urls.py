@@ -11,5 +11,5 @@ urlpatterns = [
     path('jobs/<str:pk>/delete/', views.deleteAJob, name='delete_job'),
 
     # FILTER
-    path('topic_stats/<str:topic>/', views.readTopicStatistics, name='topic_stats'),
+    path('topic-stats/<str:topic>/', views.readTopicStatistics, name='topic_stats'),
 ]

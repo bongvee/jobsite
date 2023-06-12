@@ -1,8 +1,11 @@
 from pathlib import Path
+from datetime import timedelta                      # JWT duration
+
+
 
 # ADDED for GDAL & ENV
 import os
-import dotenv       # pip install python-dotenv
+import dotenv                                       # pip install python-dotenv
 
 if os.name == 'nt':
     VENV_BASE = os.environ['VIRTUAL_ENV']   
@@ -38,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'account.apps.AccountConfig',
     'jobs_app.apps.JobsAppConfig',
     'django.contrib.gis',
 
@@ -45,6 +49,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'storages',
     'django_filters',
+    'rest_framework_simplejwt',     # ADDED
 ]
 
 MIDDLEWARE = [
@@ -113,6 +118,21 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+
+# AUTHENTICATION: REST API - JWT
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+
+    )
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=15),     # duration
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt_tokens.AccessToken',),
+}
 
 
 # Internationalization
