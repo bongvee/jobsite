@@ -15,8 +15,10 @@ class SignUpSerializer(serializers.ModelSerializer):
             'password': { 'required': True, 'allow_blank': False, 'min_length': 5 },
         }
 
+# SIGN IN
 class UserSerializer(serializers.ModelSerializer):
+    ident_card = serializers.CharField(source='userprofile.ident_card')     # for file upload
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password')
+        fields = ('first_name', 'last_name', 'email', 'username', 'ident_card')
 

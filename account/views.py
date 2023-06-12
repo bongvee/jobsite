@@ -51,3 +51,20 @@ def currentUser(request):
 
     user = UserSerializer(request.user)
     return Response(user.data)
+
+
+# update user profile
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])  # check if user is authenticated
+def updateUser(request):
+    user = request.user
+    data = request.data
+    user.first_name = data['first_name']
+    user.last_name = data['last_name']
+    user.email = data['email']
+    user.username = data['username']
+    if data['password'] != '':
+        user.password = make_password(data['password'])
+    user.save()
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)

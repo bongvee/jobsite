@@ -1,8 +1,9 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Job
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes  # required JWT for CRUD
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated              # required JWT for CRUD
 from rest_framework.pagination import PageNumberPagination  # Pagination
 from rest_framework import status                           # search statistics
 from django.db.models import Avg, Min, Max, Count           # search statistics
@@ -11,7 +12,7 @@ from .serializers import JobSerializer
 from .filters import JobsFilter
 
 
-# read list of jobs
+# read list of jobs (public)
 @api_view(['GET'])
 def readAllJobs(request):
 
@@ -40,6 +41,7 @@ def readAllJobs(request):
 
 # read a specific job id
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])      # required JWT for CRUD
 def readAJob(request, pk):
     # to handle record/detail not found
     job = get_object_or_404(Job, id=pk)
@@ -50,7 +52,9 @@ def readAJob(request, pk):
 
 # create/ add a new job
 @api_view(['POST'])
+@permission_classes([IsAuthenticated])      # required JWT for CRUD
 def createAJob(request):
+    request.data['user'] = request.user     # required JWT for CRUD
     data = request.data
 
     job = Job.objects.create(**data)
@@ -61,8 +65,13 @@ def createAJob(request):
 
 # update/ edit the job details
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])      # required JWT for CRUD
 def updateAJob(request, pk):
     job = get_object_or_404(Job, id=pk)
+
+    # required JWT for CRUD
+    if job.user != request.user:
+        return Response({ 'message': 'You\'re not allowed to update this job.' }, status=status.HTTP_403_FORBIDDEN)
 
     job.title = request.data['title']
     job.description = request.data['description']
@@ -84,8 +93,13 @@ def updateAJob(request, pk):
 
 # delete/ remove a job
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])      # required JWT for CRUD
 def deleteAJob(request, pk):
     job = get_object_or_404(Job, id=pk)
+
+    # required JWT for CRUD
+    if job.user != request.user:
+        return Response({ 'message': 'You\'re not allowed to delete this job.' }, status=status.HTTP_403_FORBIDDEN)
 
     job.delete()
 
